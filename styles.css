@@ -2,6 +2,12 @@ h2{
     text-align:center;
     color:black;
     font-family:Bradley Hand, cursive;
+    margin:0;
+    line-height:1.2;
+}
+h3{
+    margin:0;
+    padding:0;
 }
 body{
     min-height:100vh;
@@ -9,36 +15,41 @@ body{
     background-position:center;
     transition:background-image 1s ease-in-out;
     font-family:Bradley Hand, cursive;
+    margin:0;
+    padding:0;
 }
 .bg-one{
     background-image:url("https://i.pinimg.com/736x/70/55/80/705580035ea4cebe0eda5a22290a8a51.jpg");
 }
 .bg-two{
-    background-image:url("https://i.pinimg.com/1200x/cb/cb/b1/cbcbb1cb70c1b638589ef38dd105fd7e.jpg")
+    background-image:url("https://i.pinimg.com/736x/12/25/52/122552897443b32ada53cc84df3d1d3b.jpg");
 }
 .navbar{
     display:flex;
     justify-content: space-between;
     align-items:center;
-    padding: 15px 30px;
+    padding:0px 30px;
     background: rgba(255,255,255,0.3);
     background-filter:blur(5px);
-    position:fixed;
+    position:sticky;
     width:100%;
     top:0;
     z-index:10;
     box-shadow:0 4px 10px rgba(0,0,0,0.3);
+    box-sizing:border-box;
 }
 .logo{
     font-size:1.4rem;
     font-weight:bold;
+    margin-right:auto;
 }
 .nav-links{
     list-style:none;
     display:flex;
-    gap:20px;
+    gap:30px;
+    margin-right:45px;
 }
-.navlinks a{
+.nav-links a{
     text-decoration:none;
     color:black;
     font-weight:500px;
@@ -50,19 +61,44 @@ body{
     text-decoration:underline;
     cursor:pointer;
     border:none;
-    background-color:rgba(255,255,255,0.9);
     border-radius:5px;
     transition:all 0.3s ease;
     font-family:Bradley Hand,cursive;
     font-weight:500;
 }
+    transition:all 0.3s ease;
+    font-family:Bradley Hand,cursive;
+    font-weight:500;
+}
+.nav-links a:active{
+    transform:translateX(3px);
+} 
 #bgToggle:hover{
     background-color:rgba(255,255,255,0.9);
     box-shadow:0 4px 8px rgba(0,0,0,0.3);
     text-decoration:underline;
 }
+
+#bgToggle{
+    background-color:rgba(255,255,255,0.5);
+    border:none;
+    color:black;
+    padding:8px 15px;
+    border-radius:5px;
+    font-family:Bradley Hand, cursive;
+    font-weight:500;
+    transition:all 0.3s ease;
+    cursor:pointer;
+}
 main{
     padding:100px 40px 40px;
     color:#000;
     text-align:center;
+}
+.text-box{
+    background-color:rgba(0,0,0,1.0);
+    color:white;
+    padding:20px;
+    width:fit-content;
+    border:2px solid white;
 }

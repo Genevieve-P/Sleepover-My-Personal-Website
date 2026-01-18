@@ -1,11 +1,11 @@
-const toggleButton=document.getElementById("byToggle"):
-const body=document.body;
+const toggleButton = document.getElementById("bgToggle");
+const body = document.body;
 
 if(toggleButton) {
-    toggleButton.addEventListerner("click", ()=.{
+    toggleButton.addEventListener("click", () => {
         body.classList.toggle("bg-one");
-        body.classList.toiggle("bg-two");
+        body.classList.toggle("bg-two");
     });
-} else{
+} else {
     console.warn('bgToggle button not found');
 }
