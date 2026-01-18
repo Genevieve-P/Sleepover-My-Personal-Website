@@ -42,5 +42,27 @@ body{
     text-decoration:none;
     color:black;
     font-weight:500px;
-    padding
+    padding:5px 10px;
+    border-radius:5px;
+    transition:all 0.3s ease;
+}
+.nav-links a:hover{
+    text-decoration:underline;
+    cursor:pointer;
+    border:none;
+    background-color:rgba(255,255,255,0.9);
+    border-radius:5px;
+    transition:all 0.3s ease;
+    font-family:Bradley Hand,cursive;
+    font-weight:500;
+}
+#bgToggle:hover{
+    background-color:rgba(255,255,255,0.9);
+    box-shadow:0 4px 8px rgba(0,0,0,0.3);
+    text-decoration:underline;
+}
+main{
+    padding:100px 40px 40px;
+    color:#000;
+    text-align:center;
 }
