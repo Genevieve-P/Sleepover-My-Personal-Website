@@ -1,0 +1,1 @@
+powershell -ExecutionPolicy Bypass -File "C:\Users\genev\Downloads\Hack Club\Sleepover\open-in-chrome.ps1" -FilePath "C:\Users\genev\Downloads\Hack Club\Sleepover\Sleepover-My-Personal-Website\index1.html"
