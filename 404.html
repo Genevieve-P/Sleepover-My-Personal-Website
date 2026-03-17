@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Use relative paths so the CSS/JS works when opening this file locally -->
+    <link rel="stylesheet" href="./styles.css">
+    <!-- 404-specific styles (ensures it looks right even if other styles/scripts interfere) -->
+    <style>
+        html, body { min-height:100vh; margin:0; padding:0; background:#000; color:#fff; }
+        body { display:flex; align-items:center; justify-content:center; }
+        .container { text-align:center; padding:2rem; }
+        .glitch { font-size:8rem; font-weight:bold; position:relative; color:#fff; }
+        .glitch::before,
+        .glitch::after { content: attr(data-text); position:absolute; top:0; left:0; width:100%; }
+        .glitch::before { color:#ff2d78; transform: translate(-3px, 0); opacity:.8; }
+        .glitch::after { color:#00f0ff; transform: translate(3px, 0); opacity:.8; }
+        .subtitle { font-size:1.4rem; color:#ccc; margin-top:1rem; }
+        .home-btn { display:inline-block; margin-top:2rem; padding:0.6rem 1.6rem; border:2px solid #fff; background:transparent; color:#fff; border-radius:8px; text-decoration:none; font-weight:bold; }
+        .home-btn:hover { background: rgba(255,255,255,0.15); }
+    </style>
+    <link rel="icon" type="image/jpg-icon" href="kitty.jpeg">
+    <title>Error! Lost in the Gummiverse!</title>
+</head>
+<body class="404">
+    <div class="container">
+        <h1 class="glitch" data-text="404">404</h1>
+        <p class="subtitle">Uh oh! You seem to have wandered into the Gummiverse!~~~</p>
+        <a class="home-btn" href="index1.html">Take me back to Gummi's Amazing Page...?</a>
+    </div>
+
+    <script>
+        const glitch = document.querySelector('.glitch');
+        if (glitch) {
+            setInterval(() => {
+                const x = Math.random() * 10 - 5;
+                const skew = Math.random() * 4 - 2;
+                glitch.style.transform = `translate(${x}px, 0) skewX(${skew}deg)`;
+                setTimeout(() => {
+                    glitch.style.transform = 'translate(0, 0) skewX(0)';
+                }, 120);
+            }, 2500 + Math.random() * 2500);
+        }
+    </script>
+</body>
+</html>

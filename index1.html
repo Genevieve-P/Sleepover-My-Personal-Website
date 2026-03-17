@@ -5,22 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/jpeg-icon" href="kitty.jpeg">
-    <script>
-        const saved = localStorage.getItem("backgroundStyle") || "bg-one";
-        document.documentElement.classList.add(saved);
-    </script>
     <script src="script.js" defer></script>
     <title>Heyo! This is Gummi!</title>
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="logo"><h2>Gummi's Amazing Page~~~</h2></div>
         <ul class="nav-links">
             <li><a href="index1.html"><h3>Home</h3></a></li>
             <li><a href="index2.html"><h3>About Me</h3></a></li>
             <li><a href="index3.html"><h3>Kitty Gallery</h3></a></li>
+            <li><a href="404.html"><h3>404 Page</h3></a></li>
         </ul>
         <button id="bgToggle">What is this!?~~~</button>
+        <button id="toggleNav">▼</button>
     </nav>
 </body>
 
