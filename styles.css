@@ -18,8 +18,11 @@ html, body {
     font-family:Bradley Hand, cursive;
     margin:0;
     padding:0;
+    color: white;
 }
-
+a{
+    color:white;
+}
 .bg-one {
     background-image:url("https://i.pinimg.com/736x/70/55/80/705580035ea4cebe0eda5a22290a8a51.jpg");
 }

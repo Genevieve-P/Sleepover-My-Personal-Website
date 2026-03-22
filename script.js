@@ -6,8 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const navbar = document.getElementById("navbar");
     const toggleNavButton = document.getElementById("toggleNav");
 
-    const savedBackground = localStorage.getItem("backgroundStyle") || "bg-one";
-    body.classList.add(savedBackground);
+    body.classList.add("bg-one");
 
     if (toggleButton) {
         toggleButton.addEventListener("click", (e) => {
@@ -79,18 +78,4 @@ async function getCat() {
         console.error('Error fetching cat:', error);
         container.innerHTML = "<p>Sorry, couldn't fetch a cat right now!</p>";
     }
-}
-
-if (document.body.classList.contains('404')) {
-    const glitch = document.querySelector('.glitch');
-    if (!glitch) return; // in case the element is missing
-
-    setInterval(() => {
-        const x = Math.random() * 8 - 4;
-        const skew = Math.random() * 2 - 1;
-        glitch.style.transform = `translate(${x}px, 0) skewX(${skew}deg)`;
-        setTimeout(() => {
-            glitch.style.transform = 'translate(0, 0) skewX(0)';
-        }, 100);
-    }, Math.random() * 3000 + 2000);
 }
