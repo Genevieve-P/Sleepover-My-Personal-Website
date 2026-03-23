@@ -1,6 +1,16 @@
 console.log("[script.js] loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Custom cursor implementation
+    const cursor = document.createElement("div");
+    cursor.classList.add("custom-cursor");
+    document.body.appendChild(cursor);
+
+    document.addEventListener("mousemove", (e) => {
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
+    });
+
     const toggleButton = document.getElementById("bgToggle");
     const navbar = document.getElementById("navbar");
     const toggleNavButton = document.getElementById("toggleNav");
@@ -24,9 +34,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const links = document.querySelectorAll(".nav-links a");
-    const currentPage = window.location.pathname.split("/").pop() || "index1.html";
+    const currentPage = window.location.pathname.split("/").pop() || "index.html";
+    const normalizedPage = currentPage === "index.html" ? "index.html" : currentPage;
     links.forEach(link => {
-        if (link.getAttribute("href") === currentPage) {
+        const href = link.getAttribute("href");
+        const normalizedHref = href === "index.html" ? "index.html" : href;
+        if (normalizedHref === normalizedPage) {
             link.classList.add("active");
         }
     });
