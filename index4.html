@@ -2,25 +2,520 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script>document.documentElement.className = localStorage.getItem("backgroundStyle") || "bg-one";</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/jpeg-icon" href="kitty.jpeg">
     <script src="script.js" defer></script>
     <title>Recs and More!</title>
+
+    <!-- ============================================================
+         CSS — Recs page only (inherits everything from styles.css)
+    ============================================================ -->
+    <style>
+
+        /* ── Section row: sideways label + cards ── */
+        .rec-section {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin: 0 auto 36px auto;
+            width: fit-content;
+        }
+
+        /* ── Sideways category label ── */
+        .rec-label {
+            width: 40px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 270px;
+        }
+
+        .rec-label span {
+            display: block;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            font-family: Bradley Hand, cursive;
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: white;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.6);
+        }
+
+        /* ── Cards row ── */
+        .rec-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        /* ── Flip card shell ── */
+        .flip-card {
+            width: 190px;
+            height: 270px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+        }
+
+        .flip-card:hover .flip-inner,
+        .flip-card.flipped .flip-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-front,
+        .flip-back {
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            overflow: hidden;
+        }
+
+        /* ── Front face — white semi-transparent like the navbar ── */
+        .flip-front {
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .flip-card:hover .flip-front {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            border-color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* ── Card image ── */
+        .card-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            display: block;
+            flex-shrink: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        /* ── Front text body ── */
+        .card-body {
+            padding: 10px 12px 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .card-title {
+            font-family: Bradley Hand, cursive;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            line-height: 1.2;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
+
+        .card-short {
+            font-family: Bradley Hand, cursive;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.45;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+
+        /* ── Back face — same white semi-transparent ── */
+        .flip-back {
+            transform: rotateY(180deg);
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 14px;
+            text-align: center;
+            gap: 9px;
+            color: white;
+        }
+
+        .flip-back .back-title {
+            font-family: Bradley Hand, cursive;
+            font-size: 1.05rem;
+            font-weight: bold;
+            line-height: 1.2;
+            color: white;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
+
+        .flip-back .back-desc {
+            font-family: Bradley Hand, cursive;
+            font-size: 0.76rem;
+            font-weight: bold;
+            line-height: 1.5;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+
+        .flip-back .back-why {
+            font-family: Bradley Hand, cursive;
+            font-size: 0.72rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            padding-top: 8px;
+            margin-top: 2px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+
+        /* hover hint */
+        .rec-hint {
+            font-family: Bradley Hand, cursive;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.85);
+            text-align: center;
+            margin-bottom: 28px;
+            letter-spacing: 0.04em;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+        }
+
+    </style>
 </head>
+
+<body>
     <nav class="navbar" id="navbar">
         <div class="logo"><h2>Recs and More By Your Friend Gummi!</h2></div>
         <ul class="nav-links">
-            <li><a href="index1.html"><h3>Back to Home!</h3></a></li>
+            <li><a href="index1.html"><h3>Home</h3></a></li>
+            <li><a href="index2.html"><h3>About Me</h3></a></li>
+            <li><a href="index3.html"><h3>Kitty Gallery</h3></a></li>
+            <li><a href="index4.html"><h3>Recs!</h3></a></li>
         </ul>
         <button id="bgToggle">What is this!?~~~</button>
         <button id="toggleNav">▼</button>
     </nav>
-<body>
+
     <main>
+
         <div class="text-box">
-            <h3>So, I have done a lot of things already and I plan to do a lot more in the future. I thought it would be fun to share some of my rec for things I have done, tried, or just like in general. I hope you find something new that you will like to try out or just find things that you have tried and already like!</h3>
-        <div>
-    
+            <h3>Recs and More!</h3>
+        </div>
+        <p></p>
+        <div class="text-box">
+            <h4>So, I have done a lot of things already and I plan to do a lot more in the future. I thought it would be fun to share some of my recs for things I have done, tried, or just like in general. I hope you find something new that you will like to try out — or just find things you've already tried and love!</h4>
+        </div>
+
+        <br>
+
+        <p class="rec-hint">✦ hover over a card to flip it and see why it's a must! ✦</p>
+
+
+        <!-- ══════════════════════
+             ANIME & SHOWS
+        ══════════════════════ -->
+        <div class="rec-section">
+            <div class="rec-label"><span>Anime &amp; Shows</span></div>
+            <div class="rec-cards">
+
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/en/0/0a/Jujutsu_Kaisen_Key_Visual.jpg" alt="Jujutsu Kaisen">
+                            <div class="card-body">
+                                <div class="card-title">Jujutsu Kaisen</div>
+                                <div class="card-short">Sorcerers, curses, and incredibly hype fights.</div>
+                            </div>
+                        </div>
+                        <div class="flip-back">
+                            <div class="back-title">Jujutsu Kaisen</div>
+                            <div class="back-desc">Action-packed supernatural anime with loveable characters and intense battles.</div>
+                            <div class="back-why">Nobara Kugisaki is literally from this show — if she's your fave, you NEED to watch her full story. Very MHA energy with higher stakes.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/en/d/d5/Amphibia_season_1_poster.jpg" alt="Amphibia">
+                            <div class="card-body">
+                                <div class="card-title">Amphibia</div>
+                                <div class="card-short">A girl teleported to a magical frog world.</div>
+                            </div>
+                        </div>
+                        <div class="flip-back">
+                            <div class="back-title">Amphibia</div>
+                            <div class="back-desc">Funny, heartfelt adventure about a girl finding herself in a frog kingdom.</div>
+                            <div class="back-why">Made by the same creator as The Owl House — same found-family magic and emotional gut-punches. A perfect next watch!</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ══════════════════════
+             BOOKS
+        ══════════════════════ -->
+        <div class="rec-section">
+            <div class="rec-label"><span>Books</span></div>
+            <div class="rec-cards">
+
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/en/thumb/b/b8/PercyJacksonLightningThief.jpg/220px-PercyJacksonLightningThief.jpg" alt="Percy Jackson">
+                            <div class="card-body">
+                                <div class="card-title">Percy Jackson</div>
+                                <div class="card-short">Greek myths, a magical school, and a sarcastic hero.</div>
+                            </div>
+                        </div>
+                        <div class="flip-back">
+                            <div class="back-title">Percy Jackson</div>
+                            <div class="back-desc">A boy discovers he's the son of a Greek god and must save the world — multiple times.</div>
+                            <div class="back-why">Has the Hogwarts energy AND the Hunger Games stakes. Fast, funny, and full of heart. The perfect bridge series!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e3/TheSchoolForGoodAndEvil.jpg/220px-TheSchoolForGoodAndEvil.jpg" alt="School for Good and Evil">
+                            <div class="card-body">
+                                <div class="card-title">School for Good and Evil</div>
+                                <div class="card-short">A magical school for fairy tale heroes and villains.</div>
+                            </div>
+                        </div>
+                        <div class="flip-back">
+                            <div class="back-title">School for Good and Evil</div>
+                            <div class="back-desc">Two best friends sorted into opposite sides of a fairy-tale school — chaos ensues.</div>
+                            <div class="back-why">If you miss Hogwarts, this fills that gap perfectly. Dark, twisty, and full of strong female characters!</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ══════════════════════
+             GAMES
+        ══════════════════════ -->
+        <div class="rec-section">
+            <div class="rec-label"><span>Games</span></div>
+            <div class="rec-cards">
+
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/Kirby_and_the_Forgotten_Land_cover_art.jpg/220px-Kirby_and_the_Forgotten_Land_cover_art.jpg" alt="Kirby and the Forgotten Land">
+                            <div class="card-body">
+                                <div class="card-title">Kirby: Forgotten Land</div>
+                                <div class="card-short">Kirby in a gorgeous 3D adventure world.</div>
+                            </div>
+                        </div>
+                        <div class="flip-back">
+                            <div class="back-title">Kirby: Forgotten Land</div>
+                            <div class="back-desc">Kirby explores a post-apocalyptic world, absorbing enemies and transforming into wild objects.</div>
+                            <div class="back-why">Your fave pink puffball gets his best game ever. Charming, gorgeous, and just the right difficulty!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Hi-Fi_Rush_cover_art.jpg/220px-Hi-Fi_Rush_cover_art.jpg" alt="Hi-Fi Rush">
+                            <div class="card-body">
+                                <div class="card-title">Hi-Fi Rush</div>
+                                <div class="card-short">Everything — combat, world, story — happens on the beat.</div>
+                            </div>
+                        </div>
+                        <div class="flip-back">
+                            <div class="back-title">Hi-Fi Rush</div>
+                            <div class="back-desc">A rhythm-action game where the entire world pulses to the music.</div>
+                            <div class="back-why">Made for someone who loves Just Dance and pop music. The style is very anime-esque. Instant mood booster!</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ══════════════════════
+             MUSIC
+        ══════════════════════ -->
+        <div class="rec-section">
+            <div class="rec-label"><span>Music</span></div>
+            <div class="rec-cards">
+
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a3/NewJeans_OMG_single_cover.png/220px-NewJeans_OMG_single_cover.png" alt="NewJeans">
+                            <div class="card-body">
+                                <div class="card-title">NewJeans</div>
+                                <div class="card-short">Dreamy Y2K-tinged K-Pop with irresistible hooks.</div>
+                            </div>
+                        </div>
+                        <div class="flip-back">
+                            <div class="back-title">NewJeans</div>
+                            <div class="back-desc">A K-Pop group blending nostalgic 2000s sounds with fresh, effortless cool.</div>
+                            <div class="back-why">If you love K-Pop AND 2010s pop, NewJeans is the perfect overlap. Hype Boy and OMG are absolute earworms!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Yoasobi_the_book_cover.png/220px-Yoasobi_the_book_cover.png" alt="Yoasobi">
+                            <div class="card-body">
+                                <div class="card-title">Yoasobi</div>
+                                <div class="card-short">Story-driven J-Pop that hits emotionally every time.</div>
+                            </div>
+                        </div>
+                        <div class="flip-back">
+                            <div class="back-title">Yoasobi</div>
+                            <div class="back-desc">A duo that turns novels into songs — every track tells a full emotional story.</div>
+                            <div class="back-why">They did the Beastars and Oshi no Ko openings. Best of anime AND J-Pop in one artist!</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ══════════════════════
+             FOOD & DESSERT
+        ══════════════════════ -->
+        <div class="rec-section">
+            <div class="rec-label"><span>Food &amp; Dessert</span></div>
+            <div class="rec-cards">
+
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Mochi_ice_cream_1.jpg/320px-Mochi_ice_cream_1.jpg" alt="Mochi Ice Cream">
+                            <div class="card-body">
+                                <div class="card-title">Mochi Ice Cream</div>
+                                <div class="card-short">Chewy Japanese rice dough filled with ice cream.</div>
+                            </div>
+                        </div>
+                        <div class="flip-back">
+                            <div class="back-title">Mochi Ice Cream</div>
+                            <div class="back-desc">Soft chewy mochi outside, cold creamy ice cream inside — tons of flavors!</div>
+                            <div class="back-why">Combines your love of ice cream with trying new foods. Strawberry and matcha are the best starting flavors!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Patbingsu.jpg/320px-Patbingsu.jpg" alt="Korean Street Sweets">
+                            <div class="card-body">
+                                <div class="card-title">Korean Street Sweets</div>
+                                <div class="card-short">Dalgona candy, bingsu, and honey butter chips.</div>
+                            </div>
+                        </div>
+                        <div class="flip-back">
+                            <div class="back-title">Korean Street Sweets</div>
+                            <div class="back-desc">A world of unique sweets — viral dalgona candy, shaved milk ice, and more.</div>
+                            <div class="back-why">Perfect for a K-Pop fan who loves candy and trying new things. Bingsu hits like a dream on a warm day!</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ══════════════════════
+             HOBBIES
+        ══════════════════════ -->
+        <div class="rec-section">
+            <div class="rec-label"><span>Hobbies</span></div>
+            <div class="rec-cards">
+
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Amigurumi_assortment.jpg/320px-Amigurumi_assortment.jpg" alt="Amigurumi Plushies">
+                            <div class="card-body">
+                                <div class="card-title">Amigurumi Plushies</div>
+                                <div class="card-short">Crochet your own tiny Kirby or axolotl!</div>
+                            </div>
+                        </div>
+                        <div class="flip-back">
+                            <div class="back-title">Amigurumi Plushies</div>
+                            <div class="back-desc">Japanese-style crocheted stuffed animals — tiny, adorable, and satisfying to make.</div>
+                            <div class="back-why">Free Kirby, Kuromi, and axolotl patterns are all over Pinterest and Ravelry. Crochet your faves!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Inktober_2019_day_1_ring.jpg/320px-Inktober_2019_day_1_ring.jpg" alt="Fandom Art Challenges">
+                            <div class="card-body">
+                                <div class="card-title">Fandom Art Challenges</div>
+                                <div class="card-short">Monthly events to level up and connect with artists.</div>
+                            </div>
+                        </div>
+                        <div class="flip-back">
+                            <div class="back-title">Fandom Art Challenges</div>
+                            <div class="back-desc">Community drawing events like Inktober and OC-tober where artists share daily themed work.</div>
+                            <div class="back-why">Improve your digital art and connect with other MHA and Owl House fans. The community is so supportive!</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <br>
+        <div class="text-box">
+            <h5>What is this???~~~</h5>
+            <li><a href="404.html"><h5>404 Page</h5></a></li>
+        </div>
+
+    </main>
+
+    <!-- ============================================================
+         JAVASCRIPT — tap/click to flip on mobile
+    ============================================================ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.flip-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('flipped');
+                });
+            });
+        });
+    </script>
+
 </body>
 </html>

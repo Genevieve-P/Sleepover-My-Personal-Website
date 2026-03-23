@@ -2,46 +2,210 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script>document.documentElement.className = localStorage.getItem("backgroundStyle") || "bg-one";</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Use relative paths so the CSS/JS works when opening this file locally -->
-    <link rel="stylesheet" href="./styles.css">
-    <!-- 404-specific styles (ensures it looks right even if other styles/scripts interfere) -->
-    <style>
-        html, body { min-height:100vh; margin:0; padding:0; background:#000; color:#fff; }
-        body { display:flex; align-items:center; justify-content:center; }
-        .container { text-align:center; padding:2rem; }
-        .glitch { font-size:8rem; font-weight:bold; position:relative; color:#fff; }
-        .glitch::before,
-        .glitch::after { content: attr(data-text); position:absolute; top:0; left:0; width:100%; }
-        .glitch::before { color:#ff2d78; transform: translate(-3px, 0); opacity:.8; }
-        .glitch::after { color:#00f0ff; transform: translate(3px, 0); opacity:.8; }
-        .subtitle { font-size:1.4rem; color:#ccc; margin-top:1rem; }
-        .home-btn { display:inline-block; margin-top:2rem; padding:0.6rem 1.6rem; border:2px solid #fff; background:transparent; color:#fff; border-radius:8px; text-decoration:none; font-weight:bold; }
-        .home-btn:hover { background: rgba(255,255,255,0.15); }
-    </style>
+    <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/jpg-icon" href="kitty.jpeg">
+    <script src="script.js" defer></script>
     <title>Error! Lost in the Gummiverse!</title>
+    <style>
+        html, body {
+            min-height: 100vh;
+            margin: 0; padding: 0;
+            background: #000 !important;
+            background-image: none !important;
+            color: #fff;
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            font-family: Bradley Hand, cursive;
+        }
+
+        /* scanlines */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0,0,0,0.15) 0px,
+                rgba(0,0,0,0.15) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            pointer-events: none;
+            z-index: 999;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+        .error-label {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 0.3em;
+            color: #fff;
+            margin-bottom: 0.4rem;
+        }
+        .pnf-label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 0.25em;
+            color: #fff;
+            margin-top: 0.4rem;
+            margin-bottom: 2rem;
+        }
+        .glitch-wrap {
+            position: relative;
+            display: inline-block;
+            font-size: 11rem;
+            font-weight: bold;
+            letter-spacing: 0.08em;
+            line-height: 1;
+        }
+        .g-base {
+            color: #fff;
+            display: block;
+            position: relative;
+            z-index: 2;
+        }
+        .g-pink {
+            color: #ff3ea5;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 1;
+            display: block;
+            animation: slicePink 0.05s steps(1) infinite;
+        }
+        .g-cyan {
+            color: #00f0ff;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 1;
+            display: block;
+            animation: sliceCyan 0.05s steps(1) infinite;
+        }
+        @keyframes slicePink {
+            0%   { clip-path: polygon(0 8%,  100% 8%,  100% 18%, 0 18%);  transform: translateX(-10px); }
+            10%  { clip-path: polygon(0 35%, 100% 35%, 100% 42%, 0 42%);  transform: translateX(-14px); }
+            20%  { clip-path: polygon(0 55%, 100% 55%, 100% 63%, 0 63%);  transform: translateX(-8px);  }
+            30%  { clip-path: polygon(0 72%, 100% 72%, 100% 80%, 0 80%);  transform: translateX(-12px); }
+            40%  { clip-path: polygon(0 20%, 100% 20%, 100% 30%, 0 30%);  transform: translateX(-16px); }
+            50%  { clip-path: polygon(0 48%, 100% 48%, 100% 56%, 0 56%);  transform: translateX(-6px);  }
+            60%  { clip-path: polygon(0 65%, 100% 65%, 100% 74%, 0 74%);  transform: translateX(-11px); }
+            70%  { clip-path: polygon(0 12%, 100% 12%, 100% 22%, 0 22%);  transform: translateX(-15px); }
+            80%  { clip-path: polygon(0 40%, 100% 40%, 100% 50%, 0 50%);  transform: translateX(-9px);  }
+            90%  { clip-path: polygon(0 78%, 100% 78%, 100% 86%, 0 86%);  transform: translateX(-13px); }
+            100% { clip-path: polygon(0 8%,  100% 8%,  100% 18%, 0 18%);  transform: translateX(-10px); }
+        }
+        @keyframes sliceCyan {
+            0%   { clip-path: polygon(0 22%, 100% 22%, 100% 32%, 0 32%);  transform: translateX(10px); }
+            10%  { clip-path: polygon(0 50%, 100% 50%, 100% 58%, 0 58%);  transform: translateX(14px); }
+            20%  { clip-path: polygon(0 68%, 100% 68%, 100% 76%, 0 76%);  transform: translateX(8px);  }
+            30%  { clip-path: polygon(0 5%,  100% 5%,  100% 14%, 0 14%);  transform: translateX(12px); }
+            40%  { clip-path: polygon(0 38%, 100% 38%, 100% 46%, 0 46%);  transform: translateX(16px); }
+            50%  { clip-path: polygon(0 60%, 100% 60%, 100% 70%, 0 70%);  transform: translateX(6px);  }
+            60%  { clip-path: polygon(0 82%, 100% 82%, 100% 90%, 0 90%);  transform: translateX(11px); }
+            70%  { clip-path: polygon(0 28%, 100% 28%, 100% 36%, 0 36%);  transform: translateX(15px); }
+            80%  { clip-path: polygon(0 15%, 100% 15%, 100% 25%, 0 25%);  transform: translateX(9px);  }
+            90%  { clip-path: polygon(0 44%, 100% 44%, 100% 54%, 0 54%);  transform: translateX(13px); }
+            100% { clip-path: polygon(0 22%, 100% 22%, 100% 32%, 0 32%);  transform: translateX(10px); }
+        }
+        .g-base::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0;
+            color: #fff;
+            animation: dispBar 0.07s steps(1) infinite;
+        }
+        @keyframes dispBar {
+            0%   { clip-path: polygon(0 0,0 0,0 0,0 0);                transform: translateX(0); }
+            15%  { clip-path: polygon(0 30%,100% 30%,100% 36%,0 36%); transform: translateX(20px); }
+            25%  { clip-path: polygon(0 0,0 0,0 0,0 0);                transform: translateX(0); }
+            40%  { clip-path: polygon(0 62%,100% 62%,100% 67%,0 67%); transform: translateX(-18px); }
+            50%  { clip-path: polygon(0 0,0 0,0 0,0 0);                transform: translateX(0); }
+            65%  { clip-path: polygon(0 48%,100% 48%,100% 52%,0 52%); transform: translateX(24px); }
+            75%  { clip-path: polygon(0 0,0 0,0 0,0 0);                transform: translateX(0); }
+            88%  { clip-path: polygon(0 15%,100% 15%,100% 20%,0 20%); transform: translateX(-22px); }
+            95%  { clip-path: polygon(0 0,0 0,0 0,0 0);                transform: translateX(0); }
+            100% { clip-path: polygon(0 0,0 0,0 0,0 0);                transform: translateX(0); }
+        }
+        .g-base::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0;
+            animation: colorBar 1.2s steps(1) infinite;
+        }
+        @keyframes colorBar {
+            0%, 70%, 100% { clip-path: polygon(0 0,0 0,0 0,0 0);           color: #fff;    transform: translateX(0); }
+            72%  { clip-path: polygon(0 40%,100% 40%,100% 44%,0 44%);      color: #ff3ea5; transform: translateX(-16px); }
+            74%  { clip-path: polygon(0 0,0 0,0 0,0 0);                    color: #fff; }
+            76%  { clip-path: polygon(0 70%,100% 70%,100% 74%,0 74%);      color: #00f0ff; transform: translateX(14px); }
+            78%  { clip-path: polygon(0 0,0 0,0 0,0 0);                    color: #fff;    transform: translateX(0); }
+            80%  { clip-path: polygon(0 22%,100% 22%,100% 26%,0 26%);      color: #ff3ea5; transform: translateX(20px); }
+            82%  { clip-path: polygon(0 0,0 0,0 0,0 0);                    color: #fff;    transform: translateX(0); }
+        }
+        .subtitle {
+            font-size: 1.3rem;
+            color: #ccc;
+            margin-top: 0.5rem;
+        }
+
+        .home-btn {
+            display: inline-block;
+            margin-top: 1.6rem;
+            padding: 0.6rem 1.6rem;
+            border: 2px solid #fff;
+            background: transparent;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .home-btn:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: #00f0ff;
+            box-shadow: 0 0 14px rgba(0,240,255,0.5);
+        }
+        h4 { color: white; }
+    </style>
 </head>
-<body class="404">
+<body>
     <div class="container">
-        <h1 class="glitch" data-text="404">404</h1>
+        <div class="error-label">ERROR!</div>
+
+        <div class="glitch-wrap">
+            <span class="g-pink">404</span>
+            <span class="g-cyan">404</span>
+            <span class="g-base" data-text="404">404</span>
+        </div>
+
+        <div class="pnf-label">PAGE NOT FOUND</div>
+
         <p class="subtitle">Uh oh! You seem to have wandered into the Gummiverse!~~~</p>
         <a class="home-btn" href="index1.html">Take me back to Gummi's Amazing Page...?</a>
         <h4>VS.</h4>
-        <a class="home-btn" href="index4.html">Or...head to my very own recommendations page! :)</a>
+        <a class="home-btn">Or...enjoy this amazing void I call home! :)</a>
     </div>
 
     <script>
-        const glitch = document.querySelector('.glitch');
-        if (glitch) {
-            setInterval(() => {
-                const x = Math.random() * 10 - 5;
-                const skew = Math.random() * 4 - 2;
-                glitch.style.transform = `translate(${x}px, 0) skewX(${skew}deg)`;
-                setTimeout(() => {
-                    glitch.style.transform = 'translate(0, 0) skewX(0)';
-                }, 120);
-            }, 2500 + Math.random() * 2500);
+        const wrap = document.querySelector('.glitch-wrap');
+        if (wrap) {
+            function burst() {
+                let t = 0;
+                const iv = setInterval(() => {
+                    wrap.style.transform = `translateX(${(Math.random() - 0.5) * 30}px)`;
+                    t++;
+                    if (t > 8) { clearInterval(iv); wrap.style.transform = ''; }
+                }, 40);
+                setTimeout(burst, 600 + Math.random() * 1400);
+            }
+            burst();
         }
     </script>
 </body>
